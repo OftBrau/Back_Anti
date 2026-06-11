@@ -63,6 +63,7 @@ public class PedidoService {
                 .pedido(pedido)
                 .producto(producto)
                 .cantidad(cantidad)
+                .precio(producto.getPrecio())
                 .estado("Pendiente")
                 .horaIngreso(LocalDateTime.now())
                 .build();
@@ -87,8 +88,8 @@ public class PedidoService {
         pedidoRepository.save(pedido);
 
         Mesa mesa = pedido.getMesa();
-        mesa.setEstado("Ocupado");
-        mesaService.actualizarEstado(mesa.getId(), "Ocupado");
+        mesa.setEstado("Ocupada");
+        mesaService.actualizarEstado(mesa.getId(), "Ocupada");
 
         messagingTemplate.convertAndSend("/topic/pedidos", pedido);
     }
@@ -147,6 +148,11 @@ public class PedidoService {
 
         pedido.setEstado("Confirmado");
         Pedido saved = pedidoRepository.save(pedido);
+
+        Mesa mesa = pedido.getMesa();
+        mesa.setEstado("Ocupada");
+        mesaService.actualizarEstado(mesa.getId(), "Ocupada");
+
         messagingTemplate.convertAndSend("/topic/pedidos", saved);
         return saved;
     }

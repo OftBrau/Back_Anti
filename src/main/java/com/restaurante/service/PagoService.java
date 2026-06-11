@@ -41,14 +41,15 @@ public class PagoService {
         for (Pedido pedido : pedidos) {
             List<DetallePedido> items = detallePedidoRepository.findByPedidoId(pedido.getId());
             for (DetallePedido item : items) {
-                double subtotal = item.getProducto().getPrecio() * item.getCantidad();
+                double precio = item.getPrecio() != null ? item.getPrecio() : item.getProducto().getPrecio();
+                double subtotal = precio * item.getCantidad();
                 total += subtotal;
 
                 DetalleVenta dv = DetalleVenta.builder()
                         .venta(venta)
                         .producto(item.getProducto())
                         .cantidad(item.getCantidad())
-                        .precioUnitario(item.getProducto().getPrecio())
+                        .precioUnitario(precio)
                         .build();
                 detalles.add(dv);
             }

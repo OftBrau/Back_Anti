@@ -29,6 +29,8 @@ public class DetallePedido {
 
     private Integer cantidad;
 
+    private Double precio;
+
     @Builder.Default
     private String estado = "Pendiente";
 
