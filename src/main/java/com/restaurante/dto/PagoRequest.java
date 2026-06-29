@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class PagoRequest {
     private String metodoPago;
     private Double montoRecibido;
+    private String comprobante;
 }

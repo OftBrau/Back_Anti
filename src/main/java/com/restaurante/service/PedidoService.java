@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -34,6 +36,10 @@ public class PedidoService {
 
     public List<Pedido> listarPorMesa(Integer mesaId) {
         return pedidoRepository.findByMesaId(mesaId);
+    }
+
+    public List<Pedido> enviosPendientes() {
+        return pedidoRepository.findByTipoAndEstado("ENVIO", "EnCocina");
     }
 
     public Pedido obtener(Integer id) {
@@ -150,8 +156,10 @@ public class PedidoService {
         Pedido saved = pedidoRepository.save(pedido);
 
         Mesa mesa = pedido.getMesa();
-        mesa.setEstado("Ocupada");
-        mesaService.actualizarEstado(mesa.getId(), "Ocupada");
+        if (mesa != null) {
+            mesa.setEstado("Ocupada");
+            mesaService.actualizarEstado(mesa.getId(), "Ocupada");
+        }
 
         messagingTemplate.convertAndSend("/topic/pedidos", saved);
         return saved;
@@ -176,7 +184,9 @@ public class PedidoService {
         pedidoRepository.save(pedido);
 
         Mesa mesa = pedido.getMesa();
-        mesaService.actualizarEstado(mesa.getId(), "Libre");
+        if (mesa != null) {
+            mesaService.actualizarEstado(mesa.getId(), "Libre");
+        }
 
         messagingTemplate.convertAndSend("/topic/pedidos", pedido);
     }
@@ -200,8 +210,13 @@ public class PedidoService {
         pedido.setEstado("EnCocina");
         pedidoRepository.save(pedido);
 
-        messagingTemplate.convertAndSend("/topic/pedidos", pedido);
-        messagingTemplate.convertAndSend("/topic/cocina", "nuevo pedido");
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                messagingTemplate.convertAndSend("/topic/pedidos", pedido);
+                messagingTemplate.convertAndSend("/topic/cocina", "nuevo pedido");
+            }
+        });
     }
 
     public VerificarDisponibilidadResponse verificarDisponibilidadItems(List<ConfirmarPedidoRequest.ItemRequest> items) {
@@ -225,12 +240,25 @@ public class PedidoService {
     }
 
     @Transactional
-    public Pedido confirmarPedidoCompleto(Integer mesaId, List<ConfirmarPedidoRequest.ItemRequest> items) {
-        Pedido pedido = crear(mesaId);
+    public Pedido confirmarPedidoCompleto(Integer mesaId, List<ConfirmarPedidoRequest.ItemRequest> items,
+                                          String tipo, String cliente, String direccion, String telefono) {
+        Mesa mesa = "ENVIO".equals(tipo) ? null : mesaService.obtener(mesaId);
+        Pedido pedido = Pedido.builder()
+                .mesa(mesa)
+                .fecha(LocalDateTime.now())
+                .estado("Pendiente")
+                .tipo("ENVIO".equals(tipo) ? "ENVIO" : "LOCAL")
+                .cliente(cliente)
+                .direccion(direccion)
+                .telefono(telefono)
+                .build();
+        pedido = pedidoRepository.save(pedido);
         for (ConfirmarPedidoRequest.ItemRequest item : items) {
             agregarProducto(pedido.getId(), item.getProductoId(), item.getCantidad());
         }
         verificarDisponibilidad(pedido.getId());
-        return confirmarPedido(pedido.getId());
+        pedido = confirmarPedido(pedido.getId());
+        enviarACocina(pedido.getId());
+        return pedido;
     }
 }

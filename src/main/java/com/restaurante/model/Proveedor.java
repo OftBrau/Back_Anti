@@ -11,19 +11,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "Usuarios")
-public class Usuario {
+@Table(name = "Proveedores")
+public class Proveedor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @Column(unique = true, nullable = false)
-    private String username;
-
-    @Column(nullable = false)
-    private String password;
-
-    @ManyToOne
-    @JoinColumn(name = "RolId")
-    private Rol rol;
+    private String nombre;
+    private String contacto;
+    private String telefono;
+    private String direccion;
 }

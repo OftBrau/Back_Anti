@@ -27,4 +27,7 @@ public class Producto {
 
     @Builder.Default
     private Integer estado = 1;
+
+    @Column(length = 1000)
+    private String imagen;
 }

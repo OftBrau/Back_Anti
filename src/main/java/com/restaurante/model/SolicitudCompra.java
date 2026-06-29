@@ -5,25 +5,23 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "Usuarios")
-public class Usuario {
+@Table(name = "SolicitudesCompra")
+public class SolicitudCompra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @Column(unique = true, nullable = false)
-    private String username;
-
-    @Column(nullable = false)
-    private String password;
-
+    private LocalDateTime fecha;
+    @Builder.Default
+    private String estado = "Pendiente";
     @ManyToOne
-    @JoinColumn(name = "RolId")
-    private Rol rol;
+    @JoinColumn(name = "ProveedorId")
+    private Proveedor proveedor;
+    private String detalle;
 }

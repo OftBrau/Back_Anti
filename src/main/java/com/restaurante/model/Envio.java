@@ -13,29 +13,27 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "Ventas")
-public class Venta {
+@Table(name = "Envios")
+public class Envio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "MesaId")
-    private Mesa mesa;
+    private String cliente;
+    private String direccion;
+    private String telefono;
+    private String detalle;
 
     private Double total;
 
-    private String metodoPago;
-
-    private Double montoRecibido;
-
-    private Double vuelto;
-
     @Builder.Default
-    private String tipo = "LOCAL";
+    private String estado = "Pendiente";
 
-    @Builder.Default
-    private String comprobante = "Boleta";
+    private LocalDateTime fechaCreacion;
 
-    private LocalDateTime fecha;
+    private LocalDateTime fechaEntrega;
+
+    private Double lat;
+
+    private Double lng;
 }

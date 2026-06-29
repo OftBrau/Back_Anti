@@ -14,6 +14,10 @@ import java.util.List;
 public class ConfirmarPedidoRequest {
     private Integer mesaId;
     private List<ItemRequest> items;
+    private String tipo;
+    private String cliente;
+    private String direccion;
+    private String telefono;
 
     @Data
     @NoArgsConstructor

@@ -32,13 +32,22 @@ public class ReporteService {
     }
 
     public Map<String, Object> resumenDiario() {
-        List<Venta> ventas = ventasDelDia();
-        double total = ventas.stream().mapToDouble(Venta::getTotal).sum();
-        long count = ventas.size();
+        return wrapVentas(ventasDelDia());
+    }
 
+    public Map<String, Object> resumenRango(LocalDateTime start, LocalDateTime end) {
+        return wrapVentas(ventasPorRango(start, end));
+    }
+
+    public Map<String, Object> resumenPorMesa(Integer mesaId) {
+        return wrapVentas(ventasPorMesa(mesaId));
+    }
+
+    private Map<String, Object> wrapVentas(List<Venta> ventas) {
+        double total = ventas.stream().mapToDouble(v -> v.getTotal() != null ? v.getTotal() : 0.0).sum();
         Map<String, Object> resumen = new HashMap<>();
         resumen.put("totalVentas", total);
-        resumen.put("cantidadVentas", count);
+        resumen.put("cantidadVentas", ventas.size());
         resumen.put("ventas", ventas);
         return resumen;
     }

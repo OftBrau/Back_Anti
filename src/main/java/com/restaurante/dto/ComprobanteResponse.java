@@ -20,6 +20,8 @@ public class ComprobanteResponse {
     private String metodoPago;
     private Double montoRecibido;
     private Double vuelto;
+    private String tipo;
+    private String comprobante;
     private LocalDateTime fecha;
 
     @Data

@@ -27,4 +27,11 @@ public class Pedido {
 
     @Builder.Default
     private String estado = "Pendiente";
+
+    @Builder.Default
+    private String tipo = "LOCAL";
+
+    private String cliente;
+    private String direccion;
+    private String telefono;
 }

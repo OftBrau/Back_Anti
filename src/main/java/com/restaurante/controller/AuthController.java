@@ -29,7 +29,7 @@ public class AuthController {
         Usuario u = usuarioRepo.findByUsername(req.getUsername())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        String token = jwtUtil.generateToken(u.getUsername(), u.getRol());
-        return ResponseEntity.ok(new LoginResponse(token, u.getRol()));
+        String token = jwtUtil.generateToken(u.getUsername(), u.getRol().getNombre());
+        return ResponseEntity.ok(new LoginResponse(token, u.getRol().getNombre()));
     }
 }

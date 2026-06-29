@@ -102,8 +102,16 @@ public class PedidoController {
         return ResponseEntity.ok(pedidoService.verificarDisponibilidadItems(body.get("items")));
     }
 
+    @GetMapping("/envio/pendientes")
+    public ResponseEntity<List<Pedido>> enviosPendientes() {
+        return ResponseEntity.ok(pedidoService.enviosPendientes());
+    }
+
     @PostMapping("/confirmar")
     public ResponseEntity<Pedido> confirmar(@RequestBody ConfirmarPedidoRequest request) {
-        return ResponseEntity.ok(pedidoService.confirmarPedidoCompleto(request.getMesaId(), request.getItems()));
+        return ResponseEntity.ok(pedidoService.confirmarPedidoCompleto(
+                request.getMesaId(), request.getItems(),
+                request.getTipo(), request.getCliente(),
+                request.getDireccion(), request.getTelefono()));
     }
 }

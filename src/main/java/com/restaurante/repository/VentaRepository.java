@@ -9,4 +9,5 @@ import java.util.List;
 public interface VentaRepository extends JpaRepository<Venta, Integer> {
     List<Venta> findByFechaBetween(LocalDateTime start, LocalDateTime end);
     List<Venta> findByMesaId(Integer mesaId);
+    List<Venta> findAllByOrderByFechaDesc();
 }

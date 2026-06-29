@@ -17,12 +17,12 @@ public class CocinaController {
 
     @GetMapping("/pendientes")
     public ResponseEntity<List<DetallePedido>> pendientes() {
-        return ResponseEntity.ok(cocinaService.todosPendientes());
+        return ResponseEntity.ok(cocinaService.pendientes());
     }
 
     @GetMapping("/pendientes/{cocinero}")
     public ResponseEntity<List<DetallePedido>> pendientesPorCocinero(@PathVariable String cocinero) {
-        return ResponseEntity.ok(cocinaService.pendientesPorCocinero(cocinero));
+        return ResponseEntity.ok(cocinaService.pendientes());
     }
 
     @PutMapping("/{detalleId}/listo")
@@ -34,5 +34,10 @@ public class CocinaController {
     @GetMapping("/listos")
     public ResponseEntity<List<DetallePedido>> listos() {
         return ResponseEntity.ok(cocinaService.listos());
+    }
+
+    @GetMapping("/listos/dia")
+    public ResponseEntity<List<DetallePedido>> listosDelDia() {
+        return ResponseEntity.ok(cocinaService.listosDelDia());
     }
 }

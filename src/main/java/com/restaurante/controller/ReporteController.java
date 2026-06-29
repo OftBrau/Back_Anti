@@ -21,16 +21,16 @@ public class ReporteController {
     }
 
     @GetMapping("/rango")
-    public ResponseEntity<?> rango(
+    public ResponseEntity<Map<String, Object>> rango(
             @RequestParam String desde,
             @RequestParam String hasta) {
         LocalDateTime start = LocalDateTime.parse(desde);
         LocalDateTime end = LocalDateTime.parse(hasta);
-        return ResponseEntity.ok(reporteService.ventasPorRango(start, end));
+        return ResponseEntity.ok(reporteService.resumenRango(start, end));
     }
 
     @GetMapping("/mesa/{mesaId}")
-    public ResponseEntity<?> porMesa(@PathVariable Integer mesaId) {
-        return ResponseEntity.ok(reporteService.ventasPorMesa(mesaId));
+    public ResponseEntity<Map<String, Object>> porMesa(@PathVariable Integer mesaId) {
+        return ResponseEntity.ok(reporteService.resumenPorMesa(mesaId));
     }
 }
