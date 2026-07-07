@@ -11,17 +11,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "Proveedores")
-public class Proveedor {
+@Table(name = "ProductoInsumo")
+public class ProductoInsumo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String nombre;
-    private String contacto;
-    private String telefono;
-    private String direccion;
 
     @ManyToOne
-    @JoinColumn(name = "CategoriaId")
-    private Categoria categoria;
+    @JoinColumn(name = "ProductoId")
+    private Producto producto;
+
+    @ManyToOne
+    @JoinColumn(name = "InsumoId")
+    private Insumo insumo;
+
+    private Double cantidad;
 }

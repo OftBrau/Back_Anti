@@ -28,6 +28,7 @@ public class PedidoService {
     private final DetallePedidoRepository detallePedidoRepository;
     private final MesaService mesaService;
     private final ProductoService productoServices;
+    private final ProductoInsumoService productoInsumoService;
     private final SimpMessagingTemplate messagingTemplate;
 
     public List<Pedido> listar() {
@@ -154,6 +155,10 @@ public class PedidoService {
 
         pedido.setEstado("Confirmado");
         Pedido saved = pedidoRepository.save(pedido);
+
+        for (DetallePedido detalle : detalles) {
+            productoInsumoService.descontarInsumos(detalle.getProducto().getId(), detalle.getCantidad());
+        }
 
         Mesa mesa = pedido.getMesa();
         if (mesa != null) {

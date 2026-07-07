@@ -24,6 +24,21 @@ public class InsumoController {
         return ResponseEntity.ok(service.obtener(id));
     }
 
+    @GetMapping("/categoria/{categoriaId}")
+    public ResponseEntity<List<Insumo>> porCategoria(@PathVariable Integer categoriaId) {
+        return ResponseEntity.ok(service.listarPorCategoria(categoriaId));
+    }
+
+    @GetMapping("/tipo/{tipo}")
+    public ResponseEntity<List<Insumo>> porTipo(@PathVariable String tipo) {
+        return ResponseEntity.ok(service.listarPorTipo(tipo));
+    }
+
+    @GetMapping("/categoria/{categoriaId}/tipo/{tipo}")
+    public ResponseEntity<List<Insumo>> porCategoriaYTipo(@PathVariable Integer categoriaId, @PathVariable String tipo) {
+        return ResponseEntity.ok(service.listarPorCategoriaYTipo(categoriaId, tipo));
+    }
+
     @PostMapping
     public ResponseEntity<Insumo> crear(@RequestBody Insumo i) {
         return ResponseEntity.ok(service.crear(i));

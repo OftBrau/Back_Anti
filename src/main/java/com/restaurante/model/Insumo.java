@@ -22,4 +22,12 @@ public class Insumo {
     private Double stockActual = 0.0;
     @Builder.Default
     private Double stockMinimo = 0.0;
+    private String tipo;
+
+    @ManyToOne
+    @JoinColumn(name = "CategoriaId")
+    private Categoria categoria;
+
+    @Column(length = 1000)
+    private String imagen;
 }
