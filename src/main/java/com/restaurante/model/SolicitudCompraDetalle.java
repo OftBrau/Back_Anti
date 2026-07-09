@@ -1,5 +1,6 @@
 package com.restaurante.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +20,7 @@ public class SolicitudCompraDetalle {
 
     @ManyToOne
     @JoinColumn(name = "SolicitudCompraId")
+    @JsonIgnore
     private SolicitudCompra solicitudCompra;
 
     @ManyToOne
@@ -26,4 +28,6 @@ public class SolicitudCompraDetalle {
     private Insumo insumo;
 
     private Double cantidad;
+
+    private Double precioUnitario;
 }

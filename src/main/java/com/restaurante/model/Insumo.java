@@ -1,5 +1,6 @@
 package com.restaurante.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,9 +25,17 @@ public class Insumo {
     private Double stockMinimo = 0.0;
     private String tipo;
 
+    @Builder.Default
+    private Double precioCompra = 0.0;
+
     @ManyToOne
     @JoinColumn(name = "CategoriaId")
     private Categoria categoria;
+
+    @ManyToOne
+    @JoinColumn(name = "ProveedorId")
+    @JsonIgnoreProperties({"categoria"})
+    private Proveedor proveedor;
 
     @Column(length = 1000)
     private String imagen;

@@ -50,6 +50,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PATCH, "/api/categorias/**").hasRole("CONTROL")
                 .requestMatchers("/api/insumos/**").hasRole("CONTROL")
                 .requestMatchers("/api/proveedores/**").hasRole("CONTROL")
+                .requestMatchers("/api/locales/**").hasAnyRole("CONTROL", "REPARTIDOR")
                 .requestMatchers("/api/solicitudes-compra/**").hasAnyRole("CONTROL", "REPARTIDOR")
                 .requestMatchers("/api/envios/**").hasAnyRole("CONTROL", "REPARTIDOR")
                 .anyRequest().authenticated()

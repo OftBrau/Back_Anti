@@ -30,6 +30,18 @@ public class SolicitudCompraController {
         return ResponseEntity.ok(service.crear(s));
     }
 
+    @PostMapping("/{id}/entregar")
+    public ResponseEntity<SolicitudCompra> entregar(@PathVariable Integer id) {
+        return ResponseEntity.ok(service.marcarEntregado(id));
+    }
+
+    @PostMapping("/{id}/pagar")
+    public ResponseEntity<SolicitudCompra> pagar(@PathVariable Integer id, @RequestBody Map<String, Object> body) {
+        Integer localId = Integer.parseInt(body.get("localId").toString());
+        String metodoPago = body.get("metodoPago").toString();
+        return ResponseEntity.ok(service.procesarPago(id, localId, metodoPago));
+    }
+
     @PatchMapping("/{id}/estado")
     public ResponseEntity<SolicitudCompra> cambiarEstado(@PathVariable Integer id, @RequestBody Map<String, String> body) {
         return ResponseEntity.ok(service.actualizarEstado(id, body.get("estado")));

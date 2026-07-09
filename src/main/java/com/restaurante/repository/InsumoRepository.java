@@ -9,4 +9,5 @@ public interface InsumoRepository extends JpaRepository<Insumo, Integer> {
     List<Insumo> findByCategoriaId(Integer categoriaId);
     List<Insumo> findByTipo(String tipo);
     List<Insumo> findByCategoriaIdAndTipo(Integer categoriaId, String tipo);
+    List<Insumo> findByProveedorId(Integer proveedorId);
 }

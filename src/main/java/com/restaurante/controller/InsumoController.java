@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/insumos")
@@ -37,6 +38,20 @@ public class InsumoController {
     @GetMapping("/categoria/{categoriaId}/tipo/{tipo}")
     public ResponseEntity<List<Insumo>> porCategoriaYTipo(@PathVariable Integer categoriaId, @PathVariable String tipo) {
         return ResponseEntity.ok(service.listarPorCategoriaYTipo(categoriaId, tipo));
+    }
+
+    @GetMapping("/proveedor/{proveedorId}")
+    public ResponseEntity<List<Insumo>> porProveedor(@PathVariable Integer proveedorId) {
+        return ResponseEntity.ok(service.listarPorProveedor(proveedorId));
+    }
+
+    @PostMapping("/asignar-proveedor")
+    public ResponseEntity<List<Insumo>> asignarProveedor(@RequestBody Map<String, Object> body) {
+        Integer proveedorId = Integer.parseInt(body.get("proveedorId").toString());
+        @SuppressWarnings("unchecked")
+        List<Integer> insumoIds = ((List<?>) body.get("insumoIds")).stream()
+                .map(o -> Integer.parseInt(o.toString())).toList();
+        return ResponseEntity.ok(service.asignarProveedor(proveedorId, insumoIds));
     }
 
     @PostMapping
